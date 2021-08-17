@@ -1,0 +1,18 @@
+[Unit]
+Description=uWSGI instance to serve app
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/raspi_room_iot
+RuntimeDirectory=uwsgi
+RuntimeDirectoryPreserve=yes
+Environment="PATH=$PATH:/opt/uwsgienv/bin"
+ExecStart=/opt/uwsgienv/bin/uwsgi --ini raspi_room_iot.ini
+KillSignal=SIGQUIT
+Restart=always
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
