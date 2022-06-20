@@ -78,6 +78,45 @@ def aeha_encode(cc, d0, dn, chksum=None):
   return code
 
 
+def nec_encode(cc, dn):
+  data = cc + dn
+
+  t = 560
+  code = []
+
+  # Leader
+  code.append(t * 16)
+  code.append(t * 8)
+
+  # Data
+  for byte in data:
+    d = byte
+    for i in range(8):
+      bit = d & 1
+      if bit == 0:
+        code.append(t)
+        code.append(t)
+      else:
+        code.append(t)
+        code.append(t * 3)
+      d = d >> 1
+  
+  # stop bit
+  code.append(t)
+
+  return code
+
+
+# father light
+#def light(level, channel=1):
+#  cc = [0x03, 0x74]
+#  d0 = 1 << 4 | level << 2 | 1
+#  d1 = d0 ^ 0xFF
+#
+#  return nec_encode(cc, [d0,d1])
+
+
+# me light
 def light(level, channel=1):
   cc = [0x2C, 0x52]
   d0 = 0x0
